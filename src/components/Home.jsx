@@ -25,6 +25,14 @@ let vali = Yup.object({
 })
 
 function Home() {
+
+  const [deleteitem,setdeleteitem] = useState('')
+
+  const [mshow, setMshow] = useState(false);
+
+  const mhandleClose = () => setMshow(false);
+  const mhandleShow = () => setMshow(true);
+
   const [cat,setcat] = useState('');
   const [store,setstore] = useState('');
 
@@ -173,7 +181,8 @@ function Home() {
                             <td>₹{val.price.toLocaleString('en-In')}</td>
                             <td>{val.genre}</td>
                             <td className={val.availability === 'In Stock' ? 'text-success' : 'text-danger'}>{val.availability}</td>
-                            <td className="fs-5 "><MdEdit onClick={()=>{setValues(val); setedit(i); handleShow()}} /> <MdDelete onClick={()=>{dispatch(remove(i))}}/></td>
+                            {/* <td className="fs-5 "><MdEdit onClick={()=>{setValues(val); setedit(i); handleShow()}} /> <MdDelete onClick={()=>{dispatch(remove(i))}}/></td> */}
+                            <td className="fs-5 "><MdEdit onClick={()=>{setValues(val); setedit(i); handleShow()}} /> <MdDelete onClick={()=>{mhandleShow(); setdeleteitem(i)}}/></td>
                         </tr>
                     )
                 })
@@ -236,6 +245,22 @@ function Home() {
           <input type="submit" className="btn btn-primary" value={edit === null ? 'Add' : 'Update'}/>
         </Modal.Footer>
     </Form>
+      </Modal>
+
+      {/* delete modal */}
+      <Modal show={mshow} onHide={mhandleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title> Delete Confirmation </Modal.Title>
+        </Modal.Header>
+        <Modal.Body> Are you sure you want to delete this ? </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={mhandleClose}>
+            Close
+          </Button>
+          <Button variant="danger" onClick={()=>{dispatch(remove(deleteitem)); mhandleClose()}}>
+            Yes, delete it
+          </Button>
+        </Modal.Footer>
       </Modal>
     </>
   );
